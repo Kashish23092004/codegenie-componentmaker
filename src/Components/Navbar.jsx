@@ -5,7 +5,7 @@ import { IoSettings } from "react-icons/io5";
 const Navbar = () => {
   return (
     <div>
-      <div className="flex navbar bg-black-900 border-[1px] border-zinc-700 text-neutral-content justify-between px-6">
+      <div className="flex navbar bg-black-900 border-[1px] border-zinc-700 text-neutral-content justify-between px-6 mb-52">
         <div className="text-2xl font-bold bg-gradient-to-r from-blue-900 to-pink-600 bg-clip-text text-transparent !pl-8">
           CodeGenie
         </div>
