@@ -15,6 +15,8 @@ const options = [
   { value: 'html-tailwind', label: 'HTML + Tailwind CSS' },
   { value: 'html-css-js', label: 'HTML + CSS + JS' },
   { value: 'html-bootstrap', label: 'HTML + Bootstrap' },
+  { value: 'react-tailwind', label: 'REACT + Tailwind CSS' },
+  { value: 'react', label: 'REACT + Tailwind CSS' },
 ];
 
 const frameworkToLanguage = {
