@@ -20,7 +20,7 @@ const OpeningPage = () => {
         <p className="text-base md:text-lg text-[#b6a6e6] max-w-lg">
           Describe what you want, select your language, and get production-ready components in seconds. Copy, paste, and share with your team.
         </p>
-        <button className="mt-4 px-7 py-2 border-2 border-white text-white rounded-full text-lg font-semibold hover:bg-white hover:text-[#2a0a2a] transition-all shadow-md">Get Started</button>
+  <button style={{padding:"12px 40px"}} className="mt-4 px-10 py-3 border-2 border-white text-white rounded-full text-lg font-semibold hover:bg-white hover:text-[#2a0a2a] transition-all shadow-md">Get Started</button>
       </div>
       {/* Right: Robot and Effect Conversation */}
       <div className="flex-1 flex flex-col items-center justify-center relative mt-12 md:mt-0">
