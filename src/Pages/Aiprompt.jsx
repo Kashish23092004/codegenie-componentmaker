@@ -10,13 +10,14 @@ import { GoogleGenAI } from "@google/genai";
 import { toast } from 'react-toastify';
 import { ImNewTab } from "react-icons/im";
 import { RxCross2 } from "react-icons/rx";
+
 const options = [
   { value: 'html-css', label: 'HTML + CSS' },
   { value: 'html-tailwind', label: 'HTML + Tailwind CSS' },
   { value: 'html-css-js', label: 'HTML + CSS + JS' },
   { value: 'html-bootstrap', label: 'HTML + Bootstrap' },
   { value: 'react-tailwind', label: 'REACT + Tailwind CSS' },
-  { value: 'react', label: 'REACT + Tailwind CSS' },
+  { value: 'react-css', label: 'REACT + CSS' },
 ];
 
 const frameworkToLanguage = {
@@ -24,7 +25,7 @@ const frameworkToLanguage = {
   "html-tailwind": "html",
   "html-css-js": "html",
   "html-bootstrap": "html",
-  "react": "javascript",
+  "react-css": "javascript",
   "react-tailwind": "javascript",
 };
 
@@ -67,14 +68,14 @@ function wrapHtmlForPreview(code) {
 }
 
 const Aiprompt = () => {
-  const [selectedOption, setSelectedOption] = useState(options[1])
-  const [generate, setgenerate] = useState(false)
-  const [activeTab, setActiveTab] = useState("code")
+  const [selectedOption, setSelectedOption] = useState(options[0]);
+  const [generate, setgenerate] = useState(false);
+  const [activeTab, setActiveTab] = useState("code");
   const [outputscreen, setoutputscreen] = useState(false);
   const [code, setCode] = useState("// Write your code here...");
-  const [framework, setframework] = useState(options[0]);
-  const [prompt, setprompt] = useState('')
-const [newtab, setnewtab] = useState(false)
+  const [prompt, setprompt] = useState('');
+  const [newtab, setnewtab] = useState(false);
+
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_REACT_APP_GEMINI_API_KEY });
 
   const copyCode = async () => {
@@ -90,7 +91,7 @@ const [newtab, setnewtab] = useState(false)
     const blob = new Blob([code], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    const extension = frameworkToLanguage[framework.value] === "html" ? "html" : "js";
+    const extension = frameworkToLanguage[selectedOption.value] === "html" ? "html" : "js";
     link.href = url;
     link.download = `generated-code.${extension}`;
     document.body.appendChild(link);
@@ -100,14 +101,21 @@ const [newtab, setnewtab] = useState(false)
   };
 
   async function getresponse() {
-    setgenerate(true);
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-       contents: `
-     You are an experienced programmer with expertise in web development and UI/UX design. You create modern, animated, and fully responsive UI components. You are highly skilled in HTML, CSS, Tailwind CSS, Bootstrap, JavaScript, React, Next.js, Vue.js, Angular, and more.
+  setgenerate(true);
+
+  let codePrompt;
+  if(selectedOption.value === "react-css" || selectedOption.value === "react-tailwind") {
+    codePrompt = `
+You are an experienced React developer. Generate a modern, responsive login page as a functional React component using JSX syntax${selectedOption.value === "react-tailwind" ? " with Tailwind CSS classes" : ""}.
+- Do NOT include any HTML, <html>, <head> or <body> tags.
+- Return ONLY the React component code inside **Markdown fenced code blocks**.
+- Do NOT include explanations, text, comments, or anything else besides the component code.
+`;
+  } else {
+    codePrompt =    ` You are an experienced programmer with expertise in web development and UI/UX design. You create modern, animated, and fully responsive UI components. You are highly skilled in HTML, CSS, Tailwind CSS, Bootstrap, JavaScript, React, Next.js, Vue.js, Angular, and more.
 
 Now, generate a UI component for: ${prompt}  
-Framework to use: ${framework.value}  
+Framework to use: ${selectedOption.value}  
 
 Requirements:  
 - The code must be clean, well-structured, and easy to understand.  
@@ -116,18 +124,23 @@ Requirements:
 - Include high-quality hover effects, shadows, animations, colors, and typography.  
 - Return ONLY the code, formatted properly in **Markdown fenced code blocks**.  
 - Do NOT include explanations, text, comments, or anything else besides the code.  
-- And give the whole code in a single HTML file.
-      `,
-      });
-
-    let cleaned = response.text
-      .replace(/```[a-z]*/gi, "") // remove ```html, ```js, etc.
-      .replace(/```/g, "");   
-
-    setCode(cleaned.trim());
-    setoutputscreen(true);
-    setgenerate(false);
+- And give the whole code in a single HTML file.`
   }
+
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: codePrompt,
+  });
+
+  let cleaned = response.text
+    .replace(/```/)
+    .replace(/```/g, "");
+
+  setCode(cleaned.trim());
+  setoutputscreen(true);
+  setgenerate(false);
+}
+
 
   return (
     <div>
@@ -146,10 +159,7 @@ Requirements:
             inputId="framework-select"
             className="mb-6"
             value={selectedOption}
-            onChange={(selected) => {
-              setframework(selected);
-              setSelectedOption(selected);
-            }}
+            onChange={setSelectedOption}
             options={options}
             placeholder="Select..."
             styles={{
@@ -254,72 +264,86 @@ Requirements:
               >
                 <CiSaveUp2 />
               </div>
-               <div onClick={()=>{setnewtab(true)}}
-                className="text-4xl hover:opacity-35 cursor-pointer">
+              <div
+                onClick={() => {
+                  setnewtab(true);
+                }}
+                className="text-4xl hover:opacity-35 cursor-pointer"
+              >
                 <ImNewTab />
               </div>
             </div>
           </div>
-
-          {outputscreen ? (
-            activeTab === "code" ? (
-              <div className="h-screen w-full">
-                <Editor
-                  height="100%"
-                  defaultLanguage={frameworkToLanguage[framework.value] || "javascript"}
-                  value={code}
-                  onChange={(newValue) => setCode(newValue)}
-                  theme="vs-dark"
-                  options={{
-                    fontSize: 14,
-                    minimap: { enabled: false },
-                    automaticLayout: true,
-                  }}
-                />
-              </div>
-            ) : (
-              <div className="h-screen w-full bg-white">
-                <iframe
-                  srcDoc={wrapHtmlForPreview(code)}
-                  className="preview w-full h-full border-none bg-white text-black flex flex-1 items-center justify-center"
-                  title="Preview"
-                  sandbox="allow-scripts allow-same-origin"
-                />
-              </div>
-            )
-          ) : (
-            activeTab === "code" && (
-              <div className="flex bg-[#3f21d4] flex-1 justify-center items-center gap-4 text-9xl">
-                <GoCodescan />
-              </div>
-            )
-          )}
-        </div>
-      </div>
-      
-      {newtab && (
-  <div className="absolute inset-0 bg-white w-screen h-screen overflow-auto">
-    <div
-      className="text-black w-full h-[60px] flex items-center justify-between px-5 bg-gray-100 relative z-20"
-    >
-      <p className='font-bold'>Preview</p>
-      <button
-        onClick={() => setnewtab(false)}
-        className="w-10 h-10 rounded-xl border border-zinc-300 flex items-center justify-center hover:bg-gray-200"
-      >
-        <RxCross2 />
-      </button>
+{outputscreen ? (
+  activeTab === "code" ? (
+    <div className="h-screen w-full">
+      <Editor
+        height="100%"
+        defaultLanguage={
+          frameworkToLanguage[selectedOption.value] || "javascript"
+        }
+        value={code}
+        onChange={(newValue) => setCode(newValue)}
+        theme="vs-dark"
+        options={{
+          fontSize: 14,
+          minimap: { enabled: false },
+          automaticLayout: true,
+        }}
+      />
     </div>
-    <iframe
-      srcDoc={wrapHtmlForPreview(code)}
-      className="container absolute left-0 top-[60px] right-0 bottom-0 bg-white w-screen min-h-[calc(100vh-60px)] overflow-auto z-10"
-      title="Preview"
-      sandbox="allow-scripts allow-same-origin"
-      style={{ position: 'absolute' }}
-    />
-  </div>
+  ) : (
+    (selectedOption.value === "react-css" || selectedOption.value === "react-tailwind") ? (
+      <div className="flex flex-col justify-center items-center h-screen w-full bg-white">
+        <p className="text-lg text-gray-800 font-semibold mt-10">
+          Preview not supported for React components.<br/>
+          Copy and run the code in your local React app.
+        </p>
+      </div>
+    ) : (
+      <div className="h-screen w-full bg-white">
+        <iframe
+          srcDoc={wrapHtmlForPreview(code)}
+          className="preview w-full h-full border-none bg-white text-black flex flex-1 items-center justify-center"
+          title="Preview"
+          sandbox="allow-scripts allow-same-origin"
+        />
+      </div>
+    )
+  )
+) : (
+  activeTab === "code" && (
+    <div className="flex bg-[#3f21d4] flex-1 justify-center items-center gap-4 text-9xl">
+      <GoCodescan />
+    </div>
+  )
 )}
 
+        </div>
+      </div>
+
+      {newtab && (
+        <div className="absolute inset-0 bg-white w-screen h-screen overflow-auto">
+          <div
+            className="text-black w-full h-[60px] flex items-center justify-between px-5 bg-gray-100 relative z-20"
+          >
+            <p className="font-bold">Preview</p>
+            <button
+              onClick={() => setnewtab(false)}
+              className="w-10 h-10 rounded-xl border border-zinc-300 flex items-center justify-center hover:bg-gray-200"
+            >
+              <RxCross2 />
+            </button>
+          </div>
+          <iframe
+            srcDoc={wrapHtmlForPreview(code)}
+            className="container absolute left-0 top-[60px] right-0 bottom-0 bg-white w-screen min-h-[calc(100vh-60px)] overflow-auto z-10"
+            title="Preview"
+            sandbox="allow-scripts allow-same-origin"
+            style={{ position: "absolute" }}
+          />
+        </div>
+      )}
     </div>
   );
 };

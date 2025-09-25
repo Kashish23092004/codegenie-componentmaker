@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Navbar from '../Components/Navbar'
-
+import { Link } from 'react-router-dom';
 
 const OpeningPage = () => {
+    const [showvideo, setshowvideo] = useState(false);
   return (
     <div className="min-h-screen w-full flex flex-col bg-gradient-to-br from-[#1a1440] via-[#0e0a1a] to-[#2a0a2a] relative overflow-hidden">
   <Navbar />
@@ -20,7 +21,9 @@ const OpeningPage = () => {
         <p className="text-base md:text-lg text-[#b6a6e6] max-w-lg">
           Describe what you want, select your language, and get production-ready components in seconds. Copy, paste, and share with your team.
         </p>
+        <Link to='/ai'>
   <button style={{padding:"12px 40px"}} className="mt-4 px-10 py-3 border-2 border-white text-white rounded-full text-lg font-semibold hover:bg-white hover:text-[#2a0a2a] transition-all shadow-md">Get Started</button>
+      </Link>
       </div>
       {/* Right: Robot and Effect Conversation */}
       <div className="flex-1 flex flex-col items-center justify-center relative mt-12 md:mt-0">
@@ -34,7 +37,14 @@ const OpeningPage = () => {
             <span className="border border-[#e0d6f7] rounded-full p-2 flex items-center justify-center">
               <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="#e0d6f7"/></svg>
             </span>
-            <span className="text-base">Play</span>
+           { (!showvideo&& <button onClick={() => setshowvideo(true)}>Play Video</button>)
+            }
+             {showvideo && (
+        <video width="640" height="360" controls autoPlay>
+          <source src="/videos/demo.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      )}
           </button>
         </div>
       </div>

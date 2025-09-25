@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaUserCircle } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
+import { RxPadding } from 'react-icons/rx';
 
 const Navbar = () => {
   return (
@@ -36,8 +37,12 @@ const Navbar = () => {
 
           {/* User and Settings Icons */}
           <div className="flex gap-4 text-3xl">
-            <div className='hover:text-slate-400 cursor-pointer'><FaUserCircle /></div>
-            <div className='hover:text-slate-400 cursor-pointer'><IoSettings /></div>
+            <button style={{padding:"12px 40px",fontSize:'1.1rem'}} 
+              className="px-6 py-2 rounded-full border-2 border-white bg-gradient-to-r from-blue-800 via-purple-900 to-pink-500 text-white text-base font-semibold shadow-md transition-all duration-200 hover:bg-white hover:text-[#2a0a2a] hover:border-pink-500"
+  
+            >
+              Sign Up
+            </button>
           </div>
         </div>
       </div>
