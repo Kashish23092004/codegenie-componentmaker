@@ -1,21 +1,28 @@
-import React from 'react'
+
+import React from 'react';
 import { FaUserCircle } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
-import { RxPadding } from 'react-icons/rx';
+import { useNavigate } from 'react-router-dom';
+
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const userId = localStorage.getItem('userId');
+
+  const handleLogout = () => {
+    localStorage.removeItem('userId');
+    navigate('/');
+  };
+
   return (
     <div>
       <div className="flex navbar bg-black-900 border-[1px] border-zinc-700 text-neutral-content justify-between px-6 mb-52">
-        <div className="text-2xl font-bold bg-gradient-to-r from-blue-900 to-pink-600 bg-clip-text text-transparent !pl-8">
-          CodeGenie
-        </div>
+        <div className="text-2xl font-bold bg-gradient-to-r from-blue-900 to-pink-600 bg-clip-text text-transparent !pl-8 cursor-pointer" onClick={()=>navigate('/')}>CodeGenie</div>
 
         <div className="flex items-center gap-4 px-4 py-2 ">
           {/* Theme toggle */}
           <label className="swap swap-rotate hover:text-slate-400 ">
             <input type="checkbox" className="theme-controller" value="synthwave" />
-
             {/* Sun icon */}
             <svg
               className="swap-off h-10 w-10 fill-current"
@@ -24,7 +31,6 @@ const Navbar = () => {
             >
               <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
             </svg>
-
             {/* Moon icon */}
             <svg
               className="swap-on h-10 w-10 fill-current"
@@ -37,12 +43,23 @@ const Navbar = () => {
 
           {/* User and Settings Icons */}
           <div className="flex gap-4 text-3xl">
-            <button style={{padding:"12px 40px",fontSize:'1.1rem'}} 
-              className="px-6 py-2 rounded-full border-2 border-white bg-gradient-to-r from-blue-800 via-purple-900 to-pink-500 text-white text-base font-semibold shadow-md transition-all duration-200 hover:bg-white hover:text-[#2a0a2a] hover:border-pink-500"
-  
-            >
-              Sign Up
-            </button>
+            {!userId ? (
+              <button
+                style={{ padding: "12px 40px", fontSize: '1.1rem' }}
+                className="px-6 py-2 rounded-full border-2 border-white bg-gradient-to-r from-blue-800 via-purple-900 to-pink-500 text-white text-base font-semibold shadow-md transition-all duration-200 hover:bg-white hover:text-[#2a0a2a] hover:border-pink-500"
+                onClick={() => navigate('/login')}
+              >
+                Login
+              </button>
+            ) : (
+              <button
+                style={{ padding: "12px 40px", fontSize: '1.1rem' }}
+                className="px-6 py-2 rounded-full border-2 border-white bg-gradient-to-r from-blue-800 via-purple-900 to-pink-500 text-white text-base font-semibold shadow-md transition-all duration-200 hover:bg-white hover:text-[#2a0a2a] hover:border-pink-500"
+                onClick={handleLogout}
+              >
+                Logout
+              </button>
+            )}
           </div>
         </div>
       </div>
