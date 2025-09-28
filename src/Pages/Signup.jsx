@@ -49,17 +49,7 @@ const Signup = () => {
           <span className="mx-2 text-gray-400 text-sm">OR</span>
           <div className="flex-grow h-px bg-gray-200"></div>
         </div>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <button type="button" className="flex-1 flex items-center justify-center gap-2 border border-gray-200 rounded-lg py-2 bg-white hover:bg-gray-50 text-gray-700 font-medium shadow-sm transition-all">
-            <FaGoogle className="text-lg" /> signin with Google
-          </button>
-          <button type="button" className="flex-1 flex items-center justify-center gap-2 border border-gray-200 rounded-lg py-2 bg-white hover:bg-gray-50 text-gray-700 font-medium shadow-sm transition-all">
-            <FaFacebook className="text-lg" /> signin with Facebook
-          </button>
-          <button type="button" className="flex-1 flex items-center justify-center gap-2 border border-gray-200 rounded-lg py-2 bg-white hover:bg-gray-50 text-gray-700 font-medium shadow-sm transition-all">
-            <FaGithub className="text-lg" /> signin with GitHub
-          </button>
-        </div>
+        
         <div className="text-center text-gray-500 text-sm mt-2">Already have an account? <span className="text-[#6c2bd7] font-semibold cursor-pointer" onClick={()=>navigate('/login')}>Login</span></div>
       </form>
     </div>

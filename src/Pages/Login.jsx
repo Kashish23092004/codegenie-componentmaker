@@ -80,29 +80,7 @@ const Login = () => {
         >
           {generate ? <span className="loading loading-dots loading-md"></span> : "Login"}
         </button>
-        <div className="relative flex py-3 items-center">
-          <div className="flex-grow border-t border-gray-400"></div>
-          <span className="flex-shrink mx-4 text-gray-400">OR</span>
-          <div className="flex-grow border-t border-gray-400"></div>
-        </div>
-        <div className="flex gap-4 w-full">
-          <button
-            type="button"
-            className="w-1/2 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-3 bg-[#232042] text-gray-100 hover:bg-gray-800 transition-all"
-            onClick={() => toast.info('Google login logic')}
-          >
-            <span className="text-lg">G</span>
-            <span className="text-sm font-semibold">Login with Google</span>
-          </button>
-          <button
-            type="button"
-            className="w-1/2 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-3 bg-[#232042] text-gray-100 hover:bg-gray-800 transition-all"
-            onClick={() => toast.info('Facebook login logic')}
-          >
-            <span className="text-lg">F</span>
-            <span className="text-sm font-semibold">Login with Facebook</span>
-          </button>
-        </div>
+      
         <p className="text-gray-100 text-xs sm:text-sm text-center mt-1">
           Don't have an account?{' '}
           <span
