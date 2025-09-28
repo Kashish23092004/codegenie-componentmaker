@@ -1,20 +1,20 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Login = () => {
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [generate, setGenerate] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setGenerate(true);
     try {
-  const res = await fetch('http://localhost:3000/signup/login', {
+      const res = await fetch('http://localhost:3000/signup/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -22,7 +22,7 @@ const Login = () => {
       const data = await res.json();
       if (res.ok) {
         localStorage.setItem('userId', data.userId);
-        toast.success('login succesfull')
+        toast.success('Login successful');
         navigate('/opening');
       } else {
         setError(data.message || 'Login failed');
@@ -30,19 +30,88 @@ const Login = () => {
       }
     } catch (err) {
       setError('Server error');
-      toast.error(data.message);
+      toast.error('Server error');
     }
+    setGenerate(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1440] via-[#0e0a1a] to-[#2a0a2a] px-2 sm:px-4">
-      <form onSubmit={handleSubmit} className="bg-[#18122B] p-4 sm:p-8 md:p-10 rounded-xl shadow-xl flex flex-col gap-4 w-full max-w-md border border-[#3a2b5e] items-center">
-        <h2 className="text-3xl font-bold text-white mb-2">Login</h2>
-        {error && <div className="text-red-400 text-sm w-full text-center">{error}</div>}
-  <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} required className="p-2 sm:p-3 rounded bg-[#232042] text-white w-full text-sm sm:text-base" />
-  <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required className="p-2 sm:p-3 rounded bg-[#232042] text-white w-full text-sm sm:text-base" />
-  <button type="submit" className="mt-2 px-4 sm:px-8 py-2 sm:py-3 border-2 border-white text-white rounded-full text-base sm:text-lg font-semibold bg-gradient-to-r from-blue-800 via-purple-900 to-pink-500 hover:bg-white hover:text-[#2a0a2a] transition-all shadow-md w-full">Login</button>
-  <div className="text-white text-xs sm:text-sm mt-2">New user? <span className="text-pink-400 cursor-pointer" onClick={()=>navigate('/signup')}>Sign Up here</span></div>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#171434] via-[#21193d] to-[#2a0a2a]">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-[#232042] border border-[#433a5e] rounded-2xl shadow-2xl px-6 sm:px-12 py-10 flex flex-col gap-6 w-full max-w-lg mx-2"
+        style={{ backdropFilter: 'blur(0.5px)' }}
+      >
+        <h2 className="text-4xl font-extrabold text-white mb-4 text-center tracking-wide drop-shadow">Welcome Back!</h2>
+        <p className="text-gray-300 text-center mb-2 text-base">Login to your account to continue.</p>
+        {error && (
+          <div className="text-red-400 text-center font-medium text-xs px-3 py-2 rounded mb-1 bg-red-900 bg-opacity-20">
+            {error}
+          </div>
+        )}
+        <input
+          type="email"
+          placeholder="Email Address"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          required
+          className="w-full rounded-lg bg-[#282545] text-gray-100 placeholder-gray-400 px-4 py-3 sm:py-4 text-base tracking-wide focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          required
+          className="w-full rounded-lg bg-[#282545] text-gray-100 placeholder-gray-400 px-4 py-3 sm:py-4 text-base tracking-wide focus:outline-none focus:ring-2 focus:ring-purple-600 transition-all"
+        />
+        <div className="text-right mt-0">
+          <span
+            className="text-purple-300 text-xs font-medium hover:underline cursor-pointer"
+            onClick={() => toast.info('Forgot Password logic here')}
+          >
+            Forgot Password?
+          </span>
+        </div>
+        <button
+          type="submit"
+          className="mt-1 block w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500 text-white font-bold rounded-full py-2 sm:py-3 px-3 text-lg tracking-wide shadow-md hover:opacity-90 transition-all"
+          disabled={generate}
+        >
+          {generate ? <span className="loading loading-dots loading-md"></span> : "Login"}
+        </button>
+        <div className="relative flex py-3 items-center">
+          <div className="flex-grow border-t border-gray-400"></div>
+          <span className="flex-shrink mx-4 text-gray-400">OR</span>
+          <div className="flex-grow border-t border-gray-400"></div>
+        </div>
+        <div className="flex gap-4 w-full">
+          <button
+            type="button"
+            className="w-1/2 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-3 bg-[#232042] text-gray-100 hover:bg-gray-800 transition-all"
+            onClick={() => toast.info('Google login logic')}
+          >
+            <span className="text-lg">G</span>
+            <span className="text-sm font-semibold">Login with Google</span>
+          </button>
+          <button
+            type="button"
+            className="w-1/2 flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-3 bg-[#232042] text-gray-100 hover:bg-gray-800 transition-all"
+            onClick={() => toast.info('Facebook login logic')}
+          >
+            <span className="text-lg">F</span>
+            <span className="text-sm font-semibold">Login with Facebook</span>
+          </button>
+        </div>
+        <p className="text-gray-100 text-xs sm:text-sm text-center mt-1">
+          Don't have an account?{' '}
+          <span
+            className="text-pink-400 font-semibold hover:text-pink-200 cursor-pointer transition"
+            onClick={() => navigate('/signup')}
+          >
+            Sign Up
+          </span>
+        </p>
       </form>
     </div>
   );

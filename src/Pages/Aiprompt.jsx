@@ -132,7 +132,7 @@ Requirements:
     contents: codePrompt,
   });
 
-let cleaned = response.text?.match(/```(?:\w+)?\n([\s\S]*?)```/i);
+  let cleaned = response.text?.match(/```(?:\w+)?\n([\s\S]*?)```/i);
 let finalCode = cleaned && cleaned[1] ? cleaned[1].trim() : "// Unable to parse code from response.";
 
 setCode(finalCode);
@@ -146,8 +146,8 @@ setgenerate(false);
     <div>
       <Navbar />
       <br />
-      <div className="flex min-h-screen gap-10">
-        <div className="bg-[#141319] w-1/2 px-6 py-8 flex flex-col">
+      <div className="flex flex-col lg:flex-row min-h-screen gap-4 md:gap-8 lg:gap-10 px-2 md:px-4 lg:px-10">
+        <div className="bg-[#141319] w-full lg:w-1/2 px-2 md:px-6 py-6 md:py-8 flex flex-col rounded-xl max-w-full">
           <h1 className="text-white text-center text-2xl font-semibold mb-6">
             Bring your ideas to life
           </h1>
@@ -226,9 +226,9 @@ setgenerate(false);
           </div>
         </div>
 
-        <div className="w-1/2 px-6 py-8 flex flex-col">
-          <div className="bg-[#141319] h-10 flex w-full gap-4">
-            <div className="bg-[#141319] h-10 flex w-full gap-4 items-center">
+        <div className="w-full lg:w-1/2 px-2 md:px-6 py-6 md:py-8 flex flex-col mt-6 lg:mt-0 rounded-xl max-w-full">
+          <div className="bg-[#141319] h-10 flex w-full gap-2 md:gap-4 rounded-t-xl">
+            <div className="bg-[#141319] h-10 flex w-full gap-2 md:gap-4 items-center rounded-t-xl">
               <p
                 onClick={() => setActiveTab("code")}
                 className={`cursor-pointer px-4 ${
@@ -276,7 +276,7 @@ setgenerate(false);
           </div>
 {outputscreen ? (
   activeTab === "code" ? (
-    <div className="h-screen w-full">
+  <div className="h-[40vh] md:h-screen w-full">
       <Editor
         height="100%"
         defaultLanguage={
@@ -294,14 +294,14 @@ setgenerate(false);
     </div>
   ) : (
     (selectedOption.value === "react-css" || selectedOption.value === "react-tailwind") ? (
-      <div className="flex flex-col justify-center items-center h-screen w-full bg-white">
+  <div className="flex flex-col justify-center items-center h-[40vh] md:h-screen w-full bg-white rounded-xl">
         <p className="text-lg text-gray-800 font-semibold mt-10">
           Preview not supported for React components.<br/>
           Copy and run the code in your local React app.
         </p>
       </div>
     ) : (
-      <div className="h-screen w-full bg-white">
+  <div className="h-[40vh] md:h-screen w-full bg-white rounded-xl">
         <iframe
           srcDoc={wrapHtmlForPreview(code)}
           className="preview w-full h-full border-none bg-white text-black flex flex-1 items-center justify-center"
@@ -313,7 +313,7 @@ setgenerate(false);
   )
 ) : (
   activeTab === "code" && (
-    <div className="flex bg-[#3f21d4] flex-1 justify-center items-center gap-4 text-9xl">
+  <div className="flex bg-[#3f21d4] flex-1 justify-center items-center gap-4 text-5xl md:text-7xl lg:text-9xl rounded-xl">
       <GoCodescan />
     </div>
   )
@@ -323,7 +323,7 @@ setgenerate(false);
       </div>
 
       {newtab && (
-        <div className="absolute inset-0 bg-white w-screen h-screen overflow-auto">
+  <div className="absolute inset-0 bg-white w-screen h-screen overflow-auto rounded-xl">
           <div
             className="text-black w-full h-[60px] flex items-center justify-between px-5 bg-gray-100 relative z-20"
           >
