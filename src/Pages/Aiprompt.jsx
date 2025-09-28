@@ -132,13 +132,13 @@ Requirements:
     contents: codePrompt,
   });
 
-  let cleaned = response.text
-    .replace(/```/)
-    .replace(/```/g, "");
+let cleaned = response.text?.match(/```(?:\w+)?\n([\s\S]*?)```/i);
+let finalCode = cleaned && cleaned[1] ? cleaned[1].trim() : "// Unable to parse code from response.";
 
-  setCode(cleaned.trim());
-  setoutputscreen(true);
-  setgenerate(false);
+setCode(finalCode);
+setoutputscreen(true);
+setgenerate(false);
+
 }
 
 
