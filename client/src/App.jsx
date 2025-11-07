@@ -27,7 +27,9 @@ const App = () => {
     setLoading(true);
     setError('');
     try {
-      const endpoint = isSignup ? 'http://localhost:3000/signup' : 'http://localhost:3000/signup/login';
+      const endpoint = isSignup ? 'https://codegenie-componentmaker-backend.onrender.com/signup'
+  : 'https://codegenie-componentmaker-backend.onrender.com/signup/login';
+
       const body = isSignup
         ? { fullname: authForm.fullname, email: authForm.email, password: authForm.password }
         : { email: authForm.email, password: authForm.password };
