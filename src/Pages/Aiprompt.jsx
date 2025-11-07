@@ -29,6 +29,13 @@ const frameworkToLanguage = {
   "react-tailwind": "javascript",
 };
 
+ const handlePromptKeyDown = (e, getresponse) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    getresponse();
+  }
+};
+
 function wrapHtmlForPreview(code) {
   if (/<html[\s\S]*?>/i.test(code)) return code;
 
@@ -201,27 +208,31 @@ setgenerate(false);
             <legend className="text-purple-400 px-2 font-semibold">
               Your Description
             </legend>
-            <textarea
-              onChange={(e) => setprompt(e.target.value)}
-              className="w-full h-[60vh] resize-none rounded-lg bg-[#181820] text-white placeholder-gray-400 px-4 py-3 focus:ring-2 focus:ring-purple-500 border-none outline-none"
-              placeholder="Describe what component you want to build"
-              spellCheck={false}
-              rows={15}
-            />
+          <textarea
+  onChange={(e) => setprompt(e.target.value)}
+  onKeyDown={(e) => handlePromptKeyDown(e, getresponse)} // triggers getresponse on Enter
+  className="w-full h-[60vh] resize-none rounded-lg bg-[#181820] text-white placeholder-gray-400 px-4 py-3 focus:ring-2 focus:ring-purple-500 border-none outline-none"
+  placeholder="Describe what component you want to build"
+  spellCheck={false}
+  rows={15}
+/>
+
           </fieldset>
 
           <div className="flex justify-end">
             <button
-              onClick={getresponse}
-              className="flex h-14 w-32 text-black rounded-2xl justify-center items-center bg-gradient-to-r from-blue-400 to-pink-400 mr-4 hover:opacity-[70%] active:translate-x-1"
-            >
-              {generate ? (
-                <span className="loading loading-dots loading-md"></span>
-              ) : (
-                <IoSparklesOutline className="mr-2 text-lg" />
-              )}
-              <span className="text-sm font-medium">Generate</span>
-            </button>
+  onClick={getresponse}
+  disabled={generate}
+  className="flex h-14 w-32 text-black rounded-2xl justify-center items-center bg-gradient-to-r from-blue-400 to-pink-400 mr-4 hover:opacity-[70%] active:translate-x-1"
+>
+  {generate ? (
+    <span className="loading loading-dots loading-md"></span>
+  ) : (
+    <IoSparklesOutline className="mr-2 text-lg" />
+  )}
+  <span className="text-sm font-medium">Generate</span>
+</button>
+
           </div>
         </div>
 
@@ -275,7 +286,7 @@ setgenerate(false);
           </div>
 {outputscreen ? (
   activeTab === "code" ? (
-  <div className="flex-1 w-full min-h-0">
+  <div className="flex-1 w-full min-h-0 overflow-auto">
       <Editor
         height="100%"
         defaultLanguage={
@@ -293,14 +304,14 @@ setgenerate(false);
     </div>
   ) : (
     (selectedOption.value === "react-css" || selectedOption.value === "react-tailwind") ? (
-  <div className="flex flex-col justify-center items-center h-[40vh] md:h-screen w-full bg-white rounded-xl">
+  <div className="flex flex-col justify-center items-center h-[40vh] md:h-screen w-full bg-white rounded-xl overflow-auto">
         <p className="text-lg text-gray-800 font-semibold mt-10">
           Preview not supported for React components.<br/>
           Copy and run the code in your local React app.
         </p>
       </div>
     ) : (
-  <div className="h-[40vh] md:h-screen w-full bg-white rounded-xl">
+  <div className="h-[40vh] md:h-screen w-full bg-white rounded-xl overflow-auto">
         <iframe
           srcDoc={wrapHtmlForPreview(code)}
     className="preview w-full h-full border-none bg-white text-black flex flex-1 items-center justify-center"
