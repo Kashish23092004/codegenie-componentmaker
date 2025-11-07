@@ -1,50 +1,84 @@
-
-import React from 'react'
-import './App.css'
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
-import Aiprompt from './Pages/Aiprompt'
-import OpeningPage from './Pages/OpeningPage'
-import Signup from './Pages/Signup'
-import Login from './Pages/Login'
-
-const RequireAuth = ({ children }) => {
-  const userId = localStorage.getItem('userId');
-  const navigate = useNavigate();
-  if (!userId) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1440] via-[#0e0a1a] to-[#2a0a2a] px-2">
-        <div className="bg-white p-6 sm:p-8 md:p-10 rounded-2xl shadow-2xl flex flex-col gap-5 w-full max-w-md border border-gray-200 items-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-[#6c2bd7] mb-1 text-center">You need to login first</h2>
-          <p className="text-gray-500 text-center mb-2">Please login to access this page.</p>
-          <button
-            className="w-full py-3 rounded-lg text-lg font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-md hover:from-purple-600 hover:to-indigo-700 transition-all"
-            onClick={() => navigate('/login')}
-          >
-            Login
-          </button>
-        </div>
-      </div>
-    );
-  }
-  return children;
-};
+import React, { useState, useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './Components/Navbar';
+import AuthModal from './Pages/Authmodal';
+import OpeningPage from './Pages/OpeningPage';
+import Aiprompt from './Pages/Aiprompt';
+import './App.css';
 
 const App = () => {
-  return (
-    <div>
-      <Routes>
-  <Route path='/' element={<OpeningPage />} />
-  <Route path='/opening' element={<OpeningPage />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/ai' element={
-          <RequireAuth>
-            <Aiprompt />
-          </RequireAuth>
-        } />
-      </Routes>
-    </div>
-  )
-}
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isSignup, setIsSignup] = useState(false);
+  const [authForm, setAuthForm] = useState({ fullname: '', email: '', password: '' });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-export default App
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    setIsAuthenticated(!!userId);
+    if (!userId) {
+      setShowAuthModal(true);
+      setIsSignup(false);
+    }
+  }, []);
+
+  const handleAuth = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const endpoint = isSignup ? 'http://localhost:3000/signup' : 'http://localhost:3000/signup/login';
+      const body = isSignup
+        ? { fullname: authForm.fullname, email: authForm.email, password: authForm.password }
+        : { email: authForm.email, password: authForm.password };
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        localStorage.setItem('userId', data.userId);
+        setIsAuthenticated(true);
+        setShowAuthModal(false);
+      } else {
+        setError(data.message || 'Authentication failed');
+      }
+    } catch (err) {
+      setError('Server error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <Navbar 
+        userId={isAuthenticated ? localStorage.getItem('userId') : null} 
+        setUserId={(val) => setIsAuthenticated(!!val)} 
+        onShowAuthModal={() => { setIsSignup(false); setShowAuthModal(true); }} 
+      />
+
+      <AuthModal
+        visible={showAuthModal}
+        onClose={() => {}} // Disable manual close
+        onAuth={handleAuth}
+        isSignup={isSignup}
+        setIsSignup={setIsSignup}
+        error={error}
+        setError={setError}
+        authForm={authForm}
+        setAuthForm={setAuthForm}
+        loading={loading}
+        disableClose
+      />
+
+      <Routes>
+         <Route path="/" element={<OpeningPage />} />
+        <Route path="/ai" element={isAuthenticated ? <Aiprompt /> : null} />
+      </Routes>
+    </>
+  );
+};
+
+export default App;

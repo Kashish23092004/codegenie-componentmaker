@@ -144,7 +144,6 @@ setgenerate(false);
 
   return (
     <div>
-      <Navbar />
       <br />
       <div className="flex flex-col lg:flex-row min-h-screen gap-4 md:gap-8 lg:gap-10 px-2 md:px-4 lg:px-10">
         <div className="bg-[#141319] w-full lg:w-1/2 px-2 md:px-6 py-6 md:py-8 flex flex-col rounded-xl max-w-full">
@@ -276,7 +275,7 @@ setgenerate(false);
           </div>
 {outputscreen ? (
   activeTab === "code" ? (
-  <div className="h-[40vh] md:h-screen w-full">
+  <div className="flex-1 w-full min-h-0">
       <Editor
         height="100%"
         defaultLanguage={
@@ -304,9 +303,9 @@ setgenerate(false);
   <div className="h-[40vh] md:h-screen w-full bg-white rounded-xl">
         <iframe
           srcDoc={wrapHtmlForPreview(code)}
-          className="preview w-full h-full border-none bg-white text-black flex flex-1 items-center justify-center"
-          title="Preview"
-          sandbox="allow-scripts allow-same-origin"
+    className="preview w-full h-full border-none bg-white text-black flex flex-1 items-center justify-center"
+    title="Preview"
+    sandbox="allow-scripts allow-same-origin"
         />
       </div>
     )
@@ -322,28 +321,36 @@ setgenerate(false);
         </div>
       </div>
 
-      {newtab && (
+   {newtab && (
   <div className="absolute inset-0 bg-white w-screen h-screen overflow-auto rounded-xl">
-          <div
-            className="text-black w-full h-[60px] flex items-center justify-between px-5 bg-gray-100 relative z-20"
-          >
-            <p className="font-bold">Preview</p>
-            <button
-              onClick={() => setnewtab(false)}
-              className="w-10 h-10 rounded-xl border border-zinc-300 flex items-center justify-center hover:bg-gray-200"
-            >
-              <RxCross2 />
-            </button>
-          </div>
-          <iframe
-            srcDoc={wrapHtmlForPreview(code)}
-            className="container absolute left-0 top-[60px] right-0 bottom-0 bg-white w-screen min-h-[calc(100vh-60px)] overflow-auto z-10"
-            title="Preview"
-            sandbox="allow-scripts allow-same-origin"
-            style={{ position: "absolute" }}
-          />
-        </div>
-      )}
+    <div className="text-black w-full h-[60px] flex items-center justify-between px-5 bg-gray-100 relative z-20">
+      <p className="font-bold">Preview</p>
+      <button
+        onClick={() => setnewtab(false)}
+        className="w-10 h-10 rounded-xl border border-zinc-300 flex items-center justify-center hover:bg-gray-200"
+      >
+        <RxCross2 />
+      </button>
+    </div>
+    <iframe
+      srcDoc={wrapHtmlForPreview(code)}
+      className="fixed left-0 top-[60px] right-0 bottom-0 bg-white w-screen h-[calc(100vh-60px)] overflow-auto z-10"
+      title="Preview"
+      sandbox="allow-scripts allow-same-origin"
+      style={{
+        position: "fixed",
+        left: 0,
+        top: 60,
+        width: "100vw",
+        height: "calc(100vh - 60px)",
+        border: "none",
+        background: "#fff",
+        zIndex: 10,
+      }}
+    />
+  </div>
+)}
+
     </div>
   );
 };
