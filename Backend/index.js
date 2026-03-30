@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import userRoute from './Routes/user.route.js'; 
-import corsMiddleware from './cors.js';
+import cors from 'cors'; // Import cors directly here
 
 dotenv.config();
 
@@ -10,7 +10,12 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const URI = process.env.MONGODB_URI;
 
-app.use(corsMiddleware);
+// The ultimate, foolproof CORS bypass. 
+// This allows ANY Vercel URL to connect without strict matching.
+app.use(cors({
+    origin: '*'
+}));
+
 app.use(express.json());
 
 // Robust MongoDB Connection
