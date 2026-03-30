@@ -16,8 +16,8 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      // FORCED LOCALHOST FOR TESTING
-     const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users`, {
+      // Points directly to your backend's signup route
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fullname, email, password })

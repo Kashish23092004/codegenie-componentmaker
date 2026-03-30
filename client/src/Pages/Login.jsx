@@ -51,7 +51,7 @@ export default function CodeGenieApp() {
     }
 
     try {
-      const endpoint = isSignup ? `${import.meta.env.VITE_BACKEND_URL}/signup` : `${import.meta.env.VITE_BACKEND_URL}/signup/login`;
+     const endpoint = isSignup ? `${import.meta.env.VITE_BACKEND_URL}/signup` : `${import.meta.env.VITE_BACKEND_URL}/signup/login`;
       const body = isSignup 
         ? { fullname: authForm.fullname, email: authForm.email, password: authForm.password }
         : { email: authForm.email, password: authForm.password };
