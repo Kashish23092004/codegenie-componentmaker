@@ -16,15 +16,14 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      // Points directly to your backend's signup route
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/users`, {
+      const res = await fetch('https://codegenie-componentmaker.onrender.com/api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ fullname, email, password })
       });
-      
+
       const data = await res.json();
-      
+
       if (res.ok) {
         localStorage.setItem('userId', data.userId);
         toast.success('Signup successful!');
@@ -47,29 +46,29 @@ const Signup = () => {
       <form onSubmit={handleSubmit} className="bg-white p-6 sm:p-8 md:p-10 rounded-2xl shadow-2xl flex flex-col gap-5 w-full max-w-md border border-gray-200">
         <h2 className="text-3xl sm:text-4xl font-bold text-[#6c2bd7] mb-1 text-center">Welcome!</h2>
         <p className="text-gray-500 text-center mb-2">Create your account to continue.</p>
-        
+
         {error && <div className="text-red-500 text-sm text-center font-bold bg-red-100 p-2 rounded">{error}</div>}
-        
+
         <input type="text" placeholder="Full Name" value={fullname} onChange={e => setFullname(e.target.value)} required className="p-3 rounded-lg border border-gray-200 bg-gray-100 text-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-purple-400" />
         <input type="email" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} required className="p-3 rounded-lg border border-gray-200 bg-gray-100 text-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-purple-400" />
         <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} required className="p-3 rounded-lg border border-gray-200 bg-gray-100 text-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-purple-400" />
-        
-        <button 
-          type="submit" 
+
+        <button
+          type="submit"
           disabled={isLoading}
           className="mt-2 w-full py-3 rounded-lg text-lg font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-md hover:from-purple-600 hover:to-indigo-700 transition-all disabled:opacity-50"
         >
           {isLoading ? 'Signing Up...' : 'Sign Up'}
         </button>
-        
+
         <div className="flex items-center my-2">
           <div className="flex-grow h-px bg-gray-200"></div>
           <span className="mx-2 text-gray-400 text-sm">OR</span>
           <div className="flex-grow h-px bg-gray-200"></div>
         </div>
-        
+
         <div className="text-center text-gray-500 text-sm mt-2">
-          Already have an account? <span className="text-[#6c2bd7] font-semibold cursor-pointer" onClick={()=>navigate('/login')}>Login</span>
+          Already have an account? <span className="text-[#6c2bd7] font-semibold cursor-pointer" onClick={() => navigate('/login')}>Login</span>
         </div>
       </form>
     </div>
