@@ -7,28 +7,24 @@ import corsMiddleware from './cors.js';
 dotenv.config();
 
 const app = express();
-const PORT =  process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 const URI = process.env.MONGODB_URI;
 
-async function startserver() {
-  try {
-    await mongoose.connect(URI); 
-    console.log('mongodb is succesfully connected');
-  } catch (error) {
-    console.log('Error', error);
-  }
+app.use(corsMiddleware);
+app.use(express.json());
 
-  app.use(corsMiddleware);
-  app.use(express.json());
-  app.get('/', (req, res) => {
-    res.send('hello world');
-  });
+// Robust MongoDB Connection
+mongoose.connect(URI)
+  .then(() => console.log('✅ MongoDB is successfully connected'))
+  .catch((error) => console.log('❌ MongoDB Connection Error:', error));
 
-  app.use('/signup', userRoute);
+app.get('/', (req, res) => {
+  res.send('CodeGenie Backend is Running');
+});
 
-  app.listen(PORT, () => {
-    console.log(`app is listening on port ${PORT}`);
-  });
-}
+// Clean Routes
+app.use('/api/users', userRoute);
 
-startserver();
+app.listen(PORT, () => {
+  console.log(`✅ Server is listening on port ${PORT}`);
+});

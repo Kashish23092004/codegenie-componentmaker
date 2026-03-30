@@ -1,8 +1,8 @@
 import cors from 'cors';
 
 const corsOptions = {
-  origin: [ "http://localhost:5173",
-    "https://codegenie-componentmaker-client.onrender.com"],
+  // Allow all origins temporarily so localhost:5173, 5174, etc all work
+  origin: '*', 
   credentials: true,
 };
 

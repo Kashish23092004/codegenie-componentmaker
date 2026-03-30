@@ -22,32 +22,48 @@ const App = () => {
       setIsSignup(false);
     }
   }, []);
-
-  const handleAuth = async () => {
-    setLoading(true);
+const handleAuth = async () => {
     setError('');
+    
+    if (!authForm.email || !authForm.password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    if (isSignup && !authForm.fullname) {
+      setError('Please enter your full name');
+      return;
+    }
+
     try {
-      const endpoint = isSignup ? 'https://codegenie-componentmaker-backend.onrender.com/signup' : 'https://codegenie-componentmaker-backend.onrender.com/signup/login';
-      const body = isSignup
+      const baseUrl = 'https://codegenie-componentmaker-backend.onrender.com';
+      // 2. Correctly pointing to your updated backend routes
+      const endpoint = isSignup ? `${baseUrl}/api/users` : `${baseUrl}/api/users/login`;
+      
+      const body = isSignup 
         ? { fullname: authForm.fullname, email: authForm.email, password: authForm.password }
         : { email: authForm.email, password: authForm.password };
-      const res = await fetch(endpoint, {
+
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify(body)
       });
-      const data = await res.json();
-      if (res.ok) {
+
+      const data = await response.json();
+
+      if (response.ok) {
         localStorage.setItem('userId', data.userId);
         setIsAuthenticated(true);
         setShowAuthModal(false);
+        setError('');
+        // Removed undefined variables (serverLoaded, setMobileMenuOpen) that would crash the app here
       } else {
         setError(data.message || 'Authentication failed');
       }
     } catch (err) {
-      setError('Server error. Please try again.');
-    } finally {
-      setLoading(false);
+      console.log(err);
+      setError('Server error or CORS blocking the request.');
     }
   };
 
