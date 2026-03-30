@@ -1,8 +1,11 @@
 import cors from 'cors';
 
 const corsOptions = {
-  // Allow all origins temporarily so localhost:5173, 5174, etc all work
-  origin: '*', 
+  origin: [
+    'https://codegenie-componentmaker-gljf9aegf-kashish23092004s-projects.vercel.app/',
+    'http://localhost:5173',
+    'http://localhost:5174'
+  ], 
   credentials: true,
 };
 
