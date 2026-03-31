@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Navbar from '../Components/Navbar';
-
+import { useNavigate } from 'react-router-dom';
 const OpeningPage = () => {
   const [showvideo, setshowvideo] = useState(false);
-
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen w-full flex flex-col bg-gradient-to-br from-[#1a1440] via-[#0e0a1a] to-[#2a0a2a] relative overflow-hidden">
       <div className="flex-1 flex flex-col justify-center items-center px-2 sm:px-4 md:px-10 lg:px-36 py-4 md:py-8">
@@ -26,14 +26,12 @@ const OpeningPage = () => {
             </p>
 
             <button
-              onClick={() => {
-                window.location.href = '/ai';
-              }}
-              style={{ padding: "12px 40px" }}
-              className="mt-4 px-6 sm:px-10 py-2 sm:py-3 border-2 border-white text-white rounded-full text-base sm:text-lg font-semibold hover:bg-white hover:text-[#2a0a2a] transition-all shadow-md"
-            >
-              Get Started
-            </button>
+  onClick={() => navigate('/ai')} // <-- CHANGE THIS LINE
+  style={{ padding: "12px 40px" }}
+  className="mt-4 px-6 sm:px-10 py-2 sm:py-3 border-2 border-white text-white rounded-full text-base sm:text-lg font-semibold hover:bg-white hover:text-[#2a0a2a] transition-all shadow-md"
+>
+  Get Started
+</button>
           </div>
           {/* Right: Robot and Effect Conversation */}
           <div className="flex-1 flex flex-col items-center justify-center relative mt-8 md:mt-0 w-full">
