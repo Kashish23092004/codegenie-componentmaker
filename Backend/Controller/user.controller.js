@@ -19,8 +19,8 @@ export const signup = async (req, res) => {
     });
     await createdUser.save();
     res.status(201).json({ userId: createdUser._id, message: 'User successfully created' });
-  } catch (error) {
-    console.log('Error', error.message);
-    res.status(500).json({ message: 'Internal server error' });
+  } catch (err) {
+    console.log("CRITICAL DB ERROR:", err); // <-- ADD THIS LINE
+    res.status(500).json({ message: 'Server error', details: err.message }); // <-- UPDATE THIS LINE
   }
 };
