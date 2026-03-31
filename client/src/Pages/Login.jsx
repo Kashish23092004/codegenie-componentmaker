@@ -43,11 +43,9 @@ export default function CodeGenieApp() {
     }
 
     try {
-      // 100% Hardcoded to bypass Vercel environment variable issues
       const endpoint = isSignup 
-        ? `https://codegenie-componentmaker.onrender.com/api/users` 
-        : `https://codegenie-componentmaker.onrender.com/api/users/login`;
-      
+  ? 'https://codegenie-componentmaker.onrender.com/api/users' 
+  : 'https://codegenie-componentmaker.onrender.com/api/users/login';
       const body = isSignup 
         ? { fullname: authForm.fullname, email: authForm.email, password: authForm.password }
         : { email: authForm.email, password: authForm.password };

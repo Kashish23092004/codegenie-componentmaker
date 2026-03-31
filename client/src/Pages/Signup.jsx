@@ -16,11 +16,11 @@ const Signup = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch('https://codegenie-componentmaker.onrender.com/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullname, email, password })
-      });
+    const res = await fetch('https://codegenie-componentmaker.onrender.com/api/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fullname, email, password })
+});
 
       const data = await res.json();
 
