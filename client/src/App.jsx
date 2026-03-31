@@ -36,7 +36,7 @@ const handleAuth = async () => {
     }
 
     try {
-      const baseUrl = 'https://codegenie-componentmaker-backend.onrender.com';
+     const baseUrl = 'https://codegenie-componentmaker.onrender.com';
       // 2. Correctly pointing to your updated backend routes
       const endpoint = isSignup ? `${baseUrl}/api/users` : `${baseUrl}/api/users/login`;
       
