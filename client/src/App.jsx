@@ -6,7 +6,9 @@ import OpeningPage from './Pages/OpeningPage';
 import Aiprompt from './Pages/Aiprompt';
 import './App.css';
 import { startKeepAlive } from './utils/keepAlive';
-startKeepAlive(); 
+
+startKeepAlive();
+
 const App = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
@@ -23,9 +25,10 @@ const App = () => {
       setIsSignup(false);
     }
   }, []);
-const handleAuth = async () => {
+
+  const handleAuth = async () => {
     setError('');
-    
+
     if (!authForm.email || !authForm.password) {
       setError('Please fill in all fields');
       return;
@@ -36,12 +39,13 @@ const handleAuth = async () => {
       return;
     }
 
+    setLoading(true); // ← THIS WAS MISSING
+
     try {
-     const baseUrl = 'https://codegenie-componentmaker.onrender.com';
-      // 2. Correctly pointing to your updated backend routes
+      const baseUrl = 'https://codegenie-componentmaker.onrender.com';
       const endpoint = isSignup ? `${baseUrl}/api/users` : `${baseUrl}/api/users/login`;
-      
-      const body = isSignup 
+
+      const body = isSignup
         ? { fullname: authForm.fullname, email: authForm.email, password: authForm.password }
         : { email: authForm.email, password: authForm.password };
 
@@ -58,27 +62,28 @@ const handleAuth = async () => {
         setIsAuthenticated(true);
         setShowAuthModal(false);
         setError('');
-        // Removed undefined variables (serverLoaded, setMobileMenuOpen) that would crash the app here
       } else {
         setError(data.message || 'Authentication failed');
       }
     } catch (err) {
       console.log(err);
       setError('Server error or CORS blocking the request.');
+    } finally {
+      setLoading(false); // ← AND THIS
     }
   };
 
   return (
     <>
-      <Navbar 
-        userId={isAuthenticated ? localStorage.getItem('userId') : null} 
-        setUserId={(val) => setIsAuthenticated(!!val)} 
-        onShowAuthModal={() => { setIsSignup(false); setShowAuthModal(true); }} 
+      <Navbar
+        userId={isAuthenticated ? localStorage.getItem('userId') : null}
+        setUserId={(val) => setIsAuthenticated(!!val)}
+        onShowAuthModal={() => { setIsSignup(false); setShowAuthModal(true); }}
       />
 
       <AuthModal
         visible={showAuthModal}
-        onClose={() => {}} // Disable manual close
+        onClose={() => {}}
         onAuth={handleAuth}
         isSignup={isSignup}
         setIsSignup={setIsSignup}
@@ -91,7 +96,7 @@ const handleAuth = async () => {
       />
 
       <Routes>
-         <Route path="/" element={<OpeningPage />} />
+        <Route path="/" element={<OpeningPage />} />
         <Route path="/ai" element={isAuthenticated ? <Aiprompt /> : null} />
       </Routes>
     </>
