@@ -5,7 +5,8 @@ import AuthModal from './Pages/Authmodal';
 import OpeningPage from './Pages/OpeningPage';
 import Aiprompt from './Pages/Aiprompt';
 import './App.css';
-
+import { startKeepAlive } from './utils/keepAlive';
+startKeepAlive(); 
 const App = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
