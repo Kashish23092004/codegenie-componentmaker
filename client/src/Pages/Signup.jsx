@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const Signup = () => {
+export default function Signup() {
   const [fullname, setFullname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,7 +33,6 @@ const Signup = () => {
         toast.error(data.message || 'Signup failed');
       }
     } catch (err) {
-      console.error("Fetch Error:", err);
       setError('Server is offline or CORS is blocking the request.');
       toast.error('Could not connect to the server.');
     } finally {
@@ -42,76 +41,175 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1a1440] via-[#0e0a1a] to-[#2a0a2a] px-2 sm:px-4">
-      <form onSubmit={handleSubmit} className="bg-white p-6 sm:p-8 md:p-10 rounded-2xl shadow-2xl flex flex-col gap-5 w-full max-w-md border border-gray-200">
-        <h2 className="text-3xl sm:text-4xl font-bold text-[#6c2bd7] mb-1 text-center">Welcome!</h2>
-        <p className="text-gray-500 text-center mb-2">Create your account to continue.</p>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #1a1440 0%, #0e0a1a 50%, #2a0a2a 100%)',
+      padding: '16px'
+    }}>
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse-btn {
+          0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7); }
+          70% { box-shadow: 0 0 0 12px rgba(139, 92, 246, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+        }
+        .auth-input {
+          width: 100%;
+          padding: 12px 16px;
+          border-radius: 10px;
+          border: 1.5px solid #e5e7eb;
+          background: #f3f4f6;
+          color: #1f2937;
+          font-size: 15px;
+          outline: none;
+          box-sizing: border-box;
+          transition: border 0.2s;
+        }
+        .auth-input:focus {
+          border-color: #8b5cf6;
+          background: #fff;
+        }
+        .auth-btn {
+          width: 100%;
+          padding: 13px;
+          border-radius: 10px;
+          border: none;
+          background: linear-gradient(90deg, #8b5cf6, #6366f1);
+          color: white;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          transition: transform 0.15s, opacity 0.15s;
+          margin-top: 8px;
+        }
+        .auth-btn:hover:not(:disabled) {
+          transform: translateY(-1px);
+          opacity: 0.95;
+        }
+        .auth-btn:active:not(:disabled) {
+          transform: scale(0.97);
+        }
+        .auth-btn:disabled {
+          cursor: not-allowed;
+          animation: pulse-btn 1.2s infinite;
+        }
+        .spinner {
+          width: 20px;
+          height: 20px;
+          border: 3px solid rgba(255,255,255,0.3);
+          border-top: 3px solid #fff;
+          border-radius: 50%;
+          animation: spin 0.75s linear infinite;
+          flex-shrink: 0;
+        }
+        .dots::after {
+          content: '';
+          animation: dots 1.2s steps(3, end) infinite;
+        }
+        @keyframes dots {
+          0%   { content: '.'; }
+          33%  { content: '..'; }
+          66%  { content: '...'; }
+          100% { content: ''; }
+        }
+      `}</style>
 
-        {error && (
-          <div className="text-red-500 text-sm text-center font-bold bg-red-100 p-2 rounded">{error}</div>
-        )}
+      <div style={{
+        background: '#fff',
+        borderRadius: '20px',
+        boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
+        width: '100%',
+        maxWidth: '420px',
+        overflow: 'hidden'
+      }}>
+        <div style={{
+          background: 'linear-gradient(90deg, #6c2bd7, #4f46e5)',
+          padding: '32px 32px 28px',
+          textAlign: 'center'
+        }}>
+          <h2 style={{ color: '#fff', fontSize: '28px', fontWeight: '700', margin: 0 }}>Welcome!</h2>
+          <p style={{ color: 'rgba(255,255,255,0.75)', marginTop: '6px', fontSize: '14px' }}>Create your account to continue.</p>
+        </div>
 
-        <input
-          type="text"
-          placeholder="Full Name"
-          value={fullname}
-          onChange={e => setFullname(e.target.value)}
-          required
-          className="p-3 rounded-lg border border-gray-200 bg-gray-100 text-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-purple-400"
-        />
-        <input
-          type="email"
-          placeholder="Email Address"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-          className="p-3 rounded-lg border border-gray-200 bg-gray-100 text-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-purple-400"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-          className="p-3 rounded-lg border border-gray-200 bg-gray-100 text-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-purple-400"
-        />
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="mt-2 w-full py-3 rounded-lg text-lg font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-md hover:from-purple-600 hover:to-indigo-700 transition-all disabled:opacity-70 flex items-center justify-center gap-2"
-        >
-          {isLoading ? (
-            <>
-              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-              </svg>
-              Signing Up...
-            </>
-          ) : (
-            'Sign Up'
+        <form onSubmit={handleSubmit} style={{ padding: '32px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {error && (
+            <div style={{
+              background: '#fef2f2',
+              border: '1px solid #fecaca',
+              color: '#dc2626',
+              borderRadius: '8px',
+              padding: '10px 14px',
+              fontSize: '13px',
+              fontWeight: '600',
+              textAlign: 'center'
+            }}>
+              {error}
+            </div>
           )}
-        </button>
 
-        <div className="flex items-center my-2">
-          <div className="flex-grow h-px bg-gray-200"></div>
-          <span className="mx-2 text-gray-400 text-sm">OR</span>
-          <div className="flex-grow h-px bg-gray-200"></div>
-        </div>
+          <input
+            className="auth-input"
+            type="text"
+            placeholder="Full Name"
+            value={fullname}
+            onChange={e => setFullname(e.target.value)}
+            required
+          />
+          <input
+            className="auth-input"
+            type="email"
+            placeholder="Email Address"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+          />
+          <input
+            className="auth-input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+          />
 
-        <div className="text-center text-gray-500 text-sm mt-2">
-          Already have an account?{' '}
-          <span
-            className="text-[#6c2bd7] font-semibold cursor-pointer"
-            onClick={() => navigate('/login')}
-          >
-            Login
-          </span>
-        </div>
-      </form>
+          <button type="submit" className="auth-btn" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <span className="spinner"></span>
+                <span>Signing Up<span className="dots"></span></span>
+              </>
+            ) : (
+              'Sign Up'
+            )}
+          </button>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '4px 0' }}>
+            <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
+            <span style={{ color: '#9ca3af', fontSize: '13px' }}>OR</span>
+            <div style={{ flex: 1, height: '1px', background: '#e5e7eb' }}></div>
+          </div>
+
+          <p style={{ textAlign: 'center', color: '#6b7280', fontSize: '14px', margin: 0 }}>
+            Already have an account?{' '}
+            <span
+              onClick={() => navigate('/login')}
+              style={{ color: '#6c2bd7', fontWeight: '600', cursor: 'pointer' }}
+            >
+              Login
+            </span>
+          </p>
+        </form>
+      </div>
     </div>
   );
-};
-
-export default Signup;
+}
